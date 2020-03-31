@@ -12,8 +12,6 @@ import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 
-private const val T = "MXP"
-
 class MXPModule private constructor(private val apkFile: File) {
 	private var lastModifiedTime: Long = 0
 	private var lastSize: Long = 0

@@ -4,8 +4,6 @@ import android.util.Log
 import java.io.*
 import java.util.*
 
-private const val T = "MDatabase"
-
 /**
  * 基于 [DataInput] 和 [DataOutput] 的二进制简单数据库，支持自动序列化/反序列化一个字符串为键值的 [Map
  * 支持的值类型详见 [MDatabase.Type]
