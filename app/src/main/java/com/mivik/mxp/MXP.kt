@@ -7,7 +7,7 @@ import android.util.Log
 import java.io.*
 import java.lang.RuntimeException
 
-private const val T = "MXP"
+internal const val T = "MXP"
 
 @SuppressLint("DiscouragedPrivateApi", "PrivateApi")
 object MXP {
@@ -36,7 +36,12 @@ object MXP {
 		}
 	}
 
-	val apkFile by lazy { getApkFile(SELF_PACKAGE_NAME) }
+	private var tmpApkFile: File? = null
+	val apkFile: File?
+		get() {
+			if (tmpApkFile == null || (!tmpApkFile!!.exists())) tmpApkFile = getApkFile(SELF_PACKAGE_NAME)
+			return tmpApkFile
+		}
 
 	private val methodSetPermissions by lazy {
 		Class.forName("android.os.FileUtils")
@@ -50,13 +55,13 @@ object MXP {
 			.apply { isAccessible = true }
 	}
 
-	fun getFileContext(path: String): String {
-		return methodGetFileContext.invoke(null, path) as String
+	fun getFileContext(path: String): String? {
+		return methodGetFileContext.invoke(null, path) as String?
 	}
 
-	fun getExpectedFileContext(path: String): String {
+	fun getExpectedFileContext(path: String): String? {
 		val userId = Process.myUid() / AID_USER
-		val ori = getFileContext(path)
+		val ori = getFileContext(path) ?: return null
 		return "${ori.substring(
 			0,
 			ori.lastIndexOf(':')
